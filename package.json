@@ -1,0 +1,62 @@
+{
+  "name": "@karinjs/plugin-shotium",
+  "version": "0.1.0",
+  "description": "karin 的 shotium 截图、渲染插件",
+  "keywords": [
+    "karin",
+    "node-karin",
+    "karin-plugin",
+    "shotium",
+    "screenshot",
+    "render"
+  ],
+  "license": "MIT",
+  "author": "sj817",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KarinJS/plugin-shotium.git"
+  },
+  "scripts": {
+    "build": "tsc && tsup",
+    "dev": "tsx src/app.ts",
+    "lint": "eslint src/",
+    "pub": "pnpm publish --access public",
+    "rm": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
+    "sync": "curl -X PUT \"https://registry-direct.npmmirror.com/-/package/@karinjs/plugin-shotium/syncs\"",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@shotkit/shotium": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.6",
+    "@types/node": "^22.19.15",
+    "eslint": "^9.7.0",
+    "neostandard": "^0.12.1",
+    "node-karin": "^1.17.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^4.1.8"
+  },
+  "karin": {
+    "main": "src/index.ts",
+    "apps": [],
+    "web": "dist/web.config.js",
+    "ts-web": "src/web.config.ts",
+    "files": [
+      "config"
+    ]
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}
