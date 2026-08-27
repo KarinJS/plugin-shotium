@@ -109,11 +109,16 @@ const webConfig: {
         description: '调用方传 multiPage: true 时，每片的高度(css 像素)',
         defaultValue: String(config.autoMultiPageHeight),
       }),
+      components.input.number('sliceCompression', {
+        label: '分片重新编码的压缩级别',
+        description: '0-9。分片要把整张图拆开重压一遍，级别越低越快、体积越大，3 是折中值',
+        defaultValue: String(config.sliceCompression),
+      }),
       components.divider.create('divider1'),
       components.input.string('cacheDir', {
         label: 'HTTP 缓存目录',
         description: '留空使用引擎默认目录；填 off 表示关闭缓存',
-        defaultValue: config.cacheDir ?? '',
+        defaultValue: config.cacheDir,
         isRequired: false,
       }),
       components.input.number('cacheMaxBytes', {
@@ -156,7 +161,8 @@ const webConfig: {
         scale: toNumber(form.scale, current.scale),
         timeout: toNumber(form.timeout, current.timeout),
         autoMultiPageHeight: toNumber(form.autoMultiPageHeight, defaultConfig.autoMultiPageHeight),
-        cacheDir: cacheDir === '' ? null : cacheDir === 'off' ? null : cacheDir,
+        sliceCompression: Math.min(9, Math.max(0, toNumber(form.sliceCompression, defaultConfig.sliceCompression))),
+        cacheDir,
         cacheMaxBytes: toNumber(form.cacheMaxBytes, current.cacheMaxBytes),
         userAgent: String(form.userAgent ?? ''),
         idleTimeoutMs: toNumber(form.idleTimeoutMs, current.idleTimeoutMs),

@@ -28,6 +28,7 @@ describe('web.config', () => {
       scale: '2',
       timeout: '10000',
       autoMultiPageHeight: '3000',
+      sliceCompression: '1',
       cacheDir: '',
       cacheMaxBytes: '1024',
       userAgent: 'ua',
@@ -41,12 +42,15 @@ describe('web.config', () => {
     expect(saved.localAccess).toBe('http')
     expect(saved.viewport).toEqual({ width: 1200, height: 900 })
     expect(saved.scale).toBe(2)
-    expect(saved.cacheDir).toBeNull()
+    expect(saved.cacheDir).toBe('')
+    expect(saved.sliceCompression).toBe(1)
     expect(saved.logStats).toBe(false)
   })
 
-  it('填 off 也表示关闭缓存', () => {
+  it('填 off 表示关闭缓存，留空表示用引擎默认目录', () => {
     webConfig.save({ ...defaultConfig, cacheDir: 'off' } as never)
-    expect(getConfig().cacheDir).toBeNull()
+    expect(getConfig().cacheDir).toBe('off')
+    webConfig.save({ ...defaultConfig, cacheDir: '  ' } as never)
+    expect(getConfig().cacheDir).toBe('')
   })
 })

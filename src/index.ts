@@ -180,7 +180,7 @@ const main = async () => {
     }
 
     /** multiPage 给的是 css 像素，切割发生在设备像素上，要乘回缩放 */
-    const list = splitPng(image, Math.round(sliceHeight * (shot.scale ?? 1)))
+    const list = splitPng(image, Math.round(sliceHeight * (shot.scale ?? 1)), config.sliceCompression)
     if (!list) {
       warnOnce('split', '当前图片格式无法分片，已按整张返回')
       return [image.toString('base64')] as never

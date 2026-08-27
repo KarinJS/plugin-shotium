@@ -47,6 +47,10 @@ karin 的渲染器就是一个函数：收下 `Options`，还回 base64。
 
 因为切割器只认 PNG，`multiPage` 配上 jpeg/webp 时会自动切到 png，并在日志里提示一次。
 
+切割要把整张图重压一遍，这一步在大图上并不便宜。1440x2541 那张图上，
+同一份像素 deflate level 9 要 1.3s、level 6 要 0.48s、level 3 只要 0.19s，
+而体积差别只有个位数百分比，所以默认用 level 3，可以通过 `sliceCompression` 调。
+
 ### 本地文件怎么交给引擎
 
 `localAccess` 有三档：
@@ -76,13 +80,42 @@ karin 的渲染器就是一个函数：收下 `Options`，还回 base64。
 | `scale` | `1` | 默认设备像素比 |
 | `timeout` | `30000` | 默认导航超时 |
 | `autoMultiPageHeight` | `4000` | `multiPage: true` 时每片的高度 |
-| `cacheDir` | `null` | HTTP 磁盘缓存目录，`null` 关闭 |
+| `sliceCompression` | `3` | 分片重新编码的 deflate 级别 0-9 |
+| `cacheDir` | `''` | HTTP 磁盘缓存目录，留空用引擎默认，填 `off` 关闭 |
 | `cacheMaxBytes` | `256MB` | 缓存上限 |
 | `userAgent` | `''` | 留空使用引擎内置 |
 | `idleTimeoutMs` | `300000` | 守护进程空闲退出时间 |
 | `logStats` | `true` | 日志里带上引擎耗时统计 |
 
 改完配置会热重建引擎，不需要重启 karin。
+
+## 性能是怎么回事
+
+在 kkk 帮助（1440x2541，png）上和 `@karinjs/plugin-puppeteer` 对比过，两边几乎打平；
+但换成常见尺寸的模板图，差距就出来了：
+
+| | 冷启动 | 600px 小模板 | kkk 帮助 1440x2541 |
+| --- | --- | --- | --- |
+| shotium | 87 ms | 60 ms | 1716 ms |
+| puppeteer(chrome-headless-shell) | 1586 ms | 120 ms | 1742 ms |
+
+大图上打平不是引擎的问题——把 1716 ms 拆开看，真正花掉的是：
+
+- **~430 ms 解析 CSS**：那张 HTML 里内联了 3 MB 没 purge 过的 tailwind，每次渲染重来一遍。
+  把这段 style 去掉，`render` 从 ~490 ms 掉到 ~52 ms。
+- **~780 ms PNG 编码**：1440x2541 的 RGBA 是 14 MB 原始像素，
+  其中 deflate 就占 ~480 ms，剩下是逐行过滤。
+- 真正的布局与绘制只有几十毫秒。
+
+这两块 puppeteer 走的是同一套 Blink + Skia，所以省不掉。
+shotium 省的是冷启动、常驻内存和进程/IPC 开销——页面越小、调用越频繁，差距越明显。
+
+需要更快的话，按收益排序：
+
+1. 输出换成 `jpeg`（编码 ~30 ms，比 png 快 25 倍）或 `webp`（~410 ms）。
+   代价是 jpeg 没有 alpha 通道，`omitBackground` 会失效。
+2. 模板侧把 CSS purge 掉，别把整份 tailwind 内联进每张图。
+3. 图别做那么大——同一份内容宽度减半，像素少四分之三。
 
 ## 已知限制
 

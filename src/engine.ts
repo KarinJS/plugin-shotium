@@ -24,8 +24,16 @@ const toStartOptions = (config: ShotiumConfig): StartOptions => {
   const options: StartOptions = {
     cacheMaxBytes: config.cacheMaxBytes,
   }
-  /** `null` 是「关掉缓存」，和「没配」不是一个意思，所以要分开判断 */
-  if (config.cacheDir !== undefined) options.cacheDir = config.cacheDir || null
+  /**
+   * 留空是「用引擎默认目录」，`off` 才是「关掉」——两者不能混为一谈。
+   * 默认开着：模板拉远端图片时，一次冷 https 请求的钱比整张图的渲染还贵。
+   */
+  const cacheDir = (config.cacheDir ?? '').trim()
+  if (cacheDir === 'off') {
+    options.cacheDir = null
+  } else if (cacheDir) {
+    options.cacheDir = cacheDir
+  }
   if (config.userAgent) options.userAgent = config.userAgent
   return options
 }

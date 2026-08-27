@@ -170,9 +170,10 @@ const unfilter = (filtered: Buffer, width: number, height: number, bpp: number):
  *
  * @param buf 原始 PNG
  * @param sliceHeight 每片高度(设备像素)
+ * @param level deflate 级别 0-9，越低越快、体积越大
  * @returns 切好的 PNG 列表；无法处理时返回 null，由调用方回退
  */
-export const splitPng = (buf: Buffer, sliceHeight: number): Buffer[] | null => {
+export const splitPng = (buf: Buffer, sliceHeight: number, level = 3): Buffer[] | null => {
   const info = readPngInfo(buf)
   if (!info) return null
   /** 隔行扫描、非 8 位深、调色板图都不处理，交给调用方回退 */
@@ -229,7 +230,7 @@ export const splitPng = (buf: Buffer, sliceHeight: number): Buffer[] | null => {
       PNG_SIGNATURE,
       writeChunk('IHDR', ihdr),
       ...extras.map(item => writeChunk(item.type, item.data)),
-      writeChunk('IDAT', zlib.deflateSync(body, { level: 6 })),
+      writeChunk('IDAT', zlib.deflateSync(body, { level })),
       writeChunk('IEND', Buffer.alloc(0)),
     ]))
   }
