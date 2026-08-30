@@ -33,7 +33,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@shotkit/shotium": "^0.3.0"
+    "@shotkit/shotium": "^0.3.3"
   },
   "devDependencies": {
     "@types/express": "5.0.6",
