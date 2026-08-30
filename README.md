@@ -89,31 +89,47 @@ karin 的渲染器就是一个函数：收下 `Options`，还回 base64。
 
 改完配置会热重建引擎，不需要重启 karin。
 
-## 性能是怎么回事
+## 性能与实测
 
-在 kkk 帮助（1440x2541，png）上和 `@karinjs/plugin-puppeteer` 对比过，两边几乎打平；
-但换成常见尺寸的模板图，差距就出来了：
+性能结论以 Shotium 主仓库的[六平台基准报告](https://sj817.github.io/shotium/)为准。
+README 不再混用不同机器、版本和页面的绝对耗时，也不跨平台排名。
 
-| | 冷启动 | 600px 小模板 | kkk 帮助 1440x2541 |
-| --- | --- | --- | --- |
-| shotium | 87 ms | 60 ms | 1716 ms |
-| puppeteer(chrome-headless-shell) | 1586 ms | 120 ms | 1742 ms |
+### 标准基准
 
-大图上打平不是引擎的问题——把 1716 ms 拆开看，真正花掉的是：
+下面摘录 Shotium 0.3.3 的 `linux-x64` 合格结果。三者在同一原生 runner、同一静态页面、
+PNG、1280×720、scale 1、`waitUntil: load` 条件下测试；表内为 p50，越低越好。
 
-- **~430 ms 解析 CSS**：那张 HTML 里内联了 3 MB 没 purge 过的 tailwind，每次渲染重来一遍。
-  把这段 style 去掉，`render` 从 ~490 ms 掉到 ~52 ms。
-- **~780 ms PNG 编码**：1440x2541 的 RGBA 是 14 MB 原始像素，
-  其中 deflate 就占 ~480 ms，剩下是逐行过滤。
-- 真正的布局与绘制只有几十毫秒。
+| 场景 | Shotium | Puppeteer Shell | Puppeteer Chrome |
+| --- | ---: | ---: | ---: |
+| 冷启动 | 53 ms | 282 ms（5.32×） | 471 ms（8.89×） |
+| 启动稳定后的首张 | 21.028 ms | 104.061 ms（4.95×） | 114.146 ms（5.43×） |
+| 预热截图 | 24.905 ms | 131.601 ms（5.28×） | 157.438 ms（6.32×） |
+| 启动—截图—关闭循环 | 53.989 ms | 289.344 ms（5.36×） | 565.139 ms（10.47×） |
 
-这两块 puppeteer 走的是同一套 Blink + Skia，所以省不掉。
-shotium 省的是冷启动、常驻内存和进程/IPC 开销——页面越小、调用越频繁，差距越明显。
+数据来源：[Shotium 0.3.3 基准报告](https://github.com/sj817/shotium/blob/main/benchmark-results/v0.3.3/20260830T000525Z-gh33274826755-a1/report.zh-CN.md)。
+该次六平台聚合结果标记为“不完整”，所以上表只引用其中状态为“通过”、允许排名的
+`linux-x64` 同平台数据，不推测缺失结果。
+
+### KKK 帮助卡片兼容性实测
+
+2026-08-30 使用 `karin-plugin-kkk` 2.42.2、`@karinjs/plugin-shotium` 0.1.0 和
+Shotium 0.3.3，在 Windows x64 对实际 SSR 帮助卡片进行了明暗主题冒烟测试：
+
+| 主题 | 尺寸 | PNG 大小 | 插件总耗时 | 引擎耗时 |
+| --- | ---: | ---: | ---: | ---: |
+| 亮色 | 1440×2673 | 5.58 MB | 800 ms | 781.2 ms |
+| 暗色 | 1440×2673 | 6.01 MB | 746 ms | 732.5 ms |
+
+两张卡片的布局、中文、背景和主题均正确。此处只有各一次样本，而且隔离测试没有启动
+KKK 的 3780 字体服务，20 个 HarmonyOS 字体请求回退到系统字体，因此它只用于兼容性证明，
+不参与上面的性能排名。
+
+这类大卡片会同时承担数 MB CSS 解析和大尺寸 PNG 编码成本；Shotium 主要节省的是冷启动、
+常驻内存与浏览器进程/CDP 往返开销。页面越小、调用越频繁，固定开销差异越明显。
 
 需要更快的话，按收益排序：
 
-1. 输出换成 `jpeg`（编码 ~30 ms，比 png 快 25 倍）或 `webp`（~410 ms）。
-   代价是 jpeg 没有 alpha 通道，`omitBackground` 会失效。
+1. 输出换成 `jpeg` 或 `webp`；代价是 jpeg 没有 alpha 通道，`omitBackground` 会失效。
 2. 模板侧把 CSS purge 掉，别把整份 tailwind 内联进每张图。
 3. 图别做那么大——同一份内容宽度减半，像素少四分之三。
 
