@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/KarinJS/plugin-shotium/compare/v0.2.0...v0.2.1) (2026-08-30)
+
+
+### 🎡 Continuous Integration
+
+* 发布环境升级到 Node 26，并支持手动补发 ([9407549](https://github.com/KarinJS/plugin-shotium/commit/940754989d283bb76c1753752df461d29be7b09f))
+
 ## [0.2.0](https://github.com/KarinJS/plugin-shotium/compare/v0.1.0...v0.2.0) (2026-08-30)
 
 

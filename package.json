@@ -1,6 +1,6 @@
 {
   "name": "@karinjs/plugin-shotium",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "karin 的 shotium 截图、渲染插件",
   "keywords": [
     "karin",
