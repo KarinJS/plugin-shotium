@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { toWaitUntil, toScreenshotOptions, pickUnsupported, toSliceHeight } from './convert'
+import { toWaitUntil, toScreenshotOptions, pickUnsupported, toSliceHeight, toTilePath, MAX_TILE_HEIGHT } from './convert'
 import { defaultConfig } from './config/index'
 
 describe('toWaitUntil', () => {
@@ -82,5 +82,30 @@ describe('toSliceHeight', () => {
     expect(toSliceHeight(false, 4000)).toBe(0)
     expect(toSliceHeight(undefined, 4000)).toBe(0)
     expect(toSliceHeight(0, 4000)).toBe(0)
+    expect(toSliceHeight(-100, 4000)).toBe(0)
+  })
+
+  it('夹到引擎能接受的整数区间，而不是让引擎拒掉整个请求', () => {
+    expect(toSliceHeight(true, 99999)).toBe(MAX_TILE_HEIGHT)
+    expect(toSliceHeight(50000, 4000)).toBe(MAX_TILE_HEIGHT)
+    expect(toSliceHeight(1200.6, 4000)).toBe(1201)
+    expect(toSliceHeight(0.4, 4000)).toBe(1)
+  })
+})
+
+describe('toTilePath', () => {
+  it('路径里写了 {n} 就替换成片号', () => {
+    expect(toTilePath('out/page-{n}.png', 2, 3)).toBe('out/page-2.png')
+    expect(toTilePath('out/{n}/{n}.png', 1, 3)).toBe('out/1/1.png')
+  })
+
+  it('没写 {n} 就把片号插在扩展名前面', () => {
+    expect(toTilePath('out/page.png', 1, 3)).toBe('out/page-1.png')
+    expect(toTilePath('out/page.png', 3, 3)).toBe('out/page-3.png')
+    expect(toTilePath('out/page', 2, 3)).toBe('out/page-2')
+  })
+
+  it('只有一片时原样存，退化成不分片的行为', () => {
+    expect(toTilePath('out/page.png', 1, 1)).toBe('out/page.png')
   })
 })

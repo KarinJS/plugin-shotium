@@ -5,11 +5,11 @@ import { fileURLToPath } from 'node:url'
 import { karin, logger, registerRender, renderTpl } from 'node-karin'
 import { karinPathHtml } from 'node-karin/root'
 import { createEngine } from './engine'
-import { splitPng } from './png'
 import { isBridgeAvailable, toBridgeUrl, toFileUrl } from './bridge'
-import { pickUnsupported, toScreenshotOptions, toSliceHeight } from './convert'
+import { pickUnsupported, toScreenshotOptions, toSliceHeight, toTilePath } from './convert'
 import { getConfig, pluginName, pluginVersion, HMR_KEY } from './config/index'
 
+import type { CaptureStats } from '@shotkit/shotium'
 import type { Snapka } from 'node-karin'
 import type { Engine } from './engine'
 import type { ShotiumConfig } from './config/index'
@@ -100,6 +100,29 @@ const formatBytes = (bytes: number): string => {
   return `${i === 0 ? Math.round(value) : value.toFixed(2)} ${units[i]}`
 }
 
+/**
+ * 日志里那一段引擎侧统计
+ * @param stats 引擎返回的统计
+ * @param enabled 配置里有没有打开
+ * @returns 拼好的一段，关掉时是空串
+ */
+const formatStats = (stats: CaptureStats, enabled: boolean): string => {
+  if (!enabled) return ''
+  return ` 网络: ${stats.requests}(缓存 ${stats.fromCache}/失败 ${stats.failed})` +
+    ` 引擎: ${stats.timing.total.toFixed(1)}ms`
+}
+
+/**
+ * 顺手存一份到磁盘
+ * @param file 目标路径
+ * @param image 图片数据
+ */
+const writeImage = (file: string, image: Buffer) => {
+  const target = path.resolve(file)
+  fs.mkdirSync(path.dirname(target), { recursive: true })
+  fs.writeFileSync(target, image)
+}
+
 const main = async () => {
   let config = getConfig()
   let engine: Engine = createEngine(config)
@@ -144,55 +167,53 @@ const main = async () => {
     const { target, allowFileAccess } = resolveTarget(data.file, config, hasHeaders)
     const shot = toScreenshotOptions(data, config)
     const sliceHeight = toSliceHeight(data.multiPage, config.autoMultiPageHeight)
+    const name = path.basename(data.file_name || data.file || 'unknown')
+    const request = { ...shot, file: target, allowFileAccess }
 
-    /** 分片是对同一张图做无损切割，切割器只认 png */
-    if (sliceHeight > 0 && shot.type !== 'png') {
-      warnOnce(
-        'multiPageType',
-        `分片渲染只能输出 png，本次已把 ${shot.type} 切换为 png`
+    /**
+     * 分片走引擎自己的 tiles 接口：文档只加载、布局、光栅化一次，
+     * 引擎在光栅化的过程中按行切开、逐片编码，同一时刻只存在一片的位图。
+     * 插件这边既不用先要一张整图，也不用为了切割把它解开重压一遍。
+     */
+    if (sliceHeight > 0) {
+      const result = await engine.screenshotTiles({ ...request, tile: { height: sliceHeight } })
+      const images = result.tiles
+        .map(tile => tile.image)
+        .filter((image): image is Buffer => !!image)
+      if (images.length === 0) throw new Error(`[${pluginName}] 引擎没有返回图片数据`)
+
+      /** 分片模式下没有「整张图」可以往 path 上写，按片编号存 */
+      if (data.path) {
+        images.forEach((image, index) => {
+          writeImage(toTilePath(data.path as string, index + 1, images.length), image)
+        })
+      }
+
+      const bytes = images.reduce((total, image) => total + image.length, 0)
+      logger.info(
+        `[${RENDER_ID}][${name}] 分片截图完成 ${images.length} 张 ` +
+        `大小: ${logger.green(formatBytes(bytes))} ` +
+        `耗时: ${logger.green(String(Date.now() - time))} ms` +
+        formatStats(result.stats, config.logStats)
       )
-      shot.type = 'png'
-      delete shot.quality
+
+      return images.map(image => image.toString('base64')) as never
     }
 
-    const result = await engine.screenshot({ ...shot, file: target, allowFileAccess })
+    const result = await engine.screenshot(request)
     const image = result.image
     if (!image) throw new Error(`[${pluginName}] 引擎没有返回图片数据`)
 
     /** karin 的 path 语义是「顺手存一份」，返回值仍然是 base64 */
-    if (data.path) {
-      fs.mkdirSync(path.dirname(path.resolve(data.path)), { recursive: true })
-      fs.writeFileSync(path.resolve(data.path), image)
-    }
-
-    const name = path.basename(data.file_name || data.file || 'unknown')
-    const stats = config.logStats
-      ? ` 网络: ${result.stats.requests}(缓存 ${result.stats.fromCache}/失败 ${result.stats.failed})` +
-        ` 引擎: ${result.stats.timing.total.toFixed(1)}ms`
-      : ''
-
-    if (sliceHeight === 0) {
-      logger.info(
-        `[${RENDER_ID}][${name}] 截图完成 大小: ${logger.green(formatBytes(image.length))} ` +
-        `耗时: ${logger.green(String(Date.now() - time))} ms${stats}`
-      )
-      return image.toString('base64') as never
-    }
-
-    /** multiPage 给的是 css 像素，切割发生在设备像素上，要乘回缩放 */
-    const list = splitPng(image, Math.round(sliceHeight * (shot.scale ?? 1)), config.sliceCompression)
-    if (!list) {
-      warnOnce('split', '当前图片格式无法分片，已按整张返回')
-      return [image.toString('base64')] as never
-    }
+    if (data.path) writeImage(data.path, image)
 
     logger.info(
-      `[${RENDER_ID}][${name}] 分片截图完成 ${list.length} 张 ` +
-      `大小: ${logger.green(formatBytes(image.length))} ` +
-      `耗时: ${logger.green(String(Date.now() - time))} ms${stats}`
+      `[${RENDER_ID}][${name}] 截图完成 大小: ${logger.green(formatBytes(image.length))} ` +
+      `耗时: ${logger.green(String(Date.now() - time))} ms` +
+      formatStats(result.stats, config.logStats)
     )
 
-    return list.map(item => item.toString('base64')) as never
+    return image.toString('base64') as never
   })
 
   logger.info(
@@ -204,4 +225,3 @@ main()
 
 export * from './config/index'
 export * from './convert'
-export * from './png'

@@ -1,8 +1,15 @@
 import { logger } from 'node-karin'
-import { start, stop, status, screenshot, daemon, cache } from '@shotkit/shotium'
+import { start, stop, status, screenshot, screenshotTiles, daemon, cache } from '@shotkit/shotium'
 import { pluginName } from './config/index'
 
-import type { ScreenshotOptions, ScreenshotResult, DaemonClient, StartOptions } from '@shotkit/shotium'
+import type {
+  ScreenshotOptions,
+  ScreenshotResult,
+  ScreenshotTilesOptions,
+  ScreenshotTilesResult,
+  DaemonClient,
+  StartOptions,
+} from '@shotkit/shotium'
 import type { ShotiumConfig } from './config/index'
 
 /**
@@ -11,6 +18,13 @@ import type { ShotiumConfig } from './config/index'
 export interface Engine {
   /** 截图 */
   screenshot: (options: ScreenshotOptions) => Promise<ScreenshotResult>
+  /**
+   * 分片截图
+   *
+   * 引擎自己把一次渲染的结果切成若干横条：文档只加载、布局、光栅化一次，
+   * 每一片单独编码，同一时刻只存在一片的位图。
+   */
+  screenshotTiles: (options: ScreenshotTilesOptions) => Promise<ScreenshotTilesResult>
   /** 关闭 */
   close: () => Promise<void>
 }
@@ -55,6 +69,7 @@ const createInprocessEngine = (config: ShotiumConfig): Engine => {
 
   return {
     screenshot: (options) => screenshot(options),
+    screenshotTiles: (options) => screenshotTiles(options),
     close: async () => {
       if (status().running) await stop()
     },
@@ -98,16 +113,26 @@ const createDaemonEngine = (config: ShotiumConfig): Engine => {
     return pending
   }
 
+  /**
+   * 拿到连接再做事，失败时重连一次
+   *
+   * 连接层面的问题重连一次再试，渲染本身的报错会在第二次原样抛出。
+   *
+   * @param run 拿到连接之后要做的事
+   * @returns run 的结果
+   */
+  const call = async <T>(run: (client: DaemonClient) => Promise<T>): Promise<T> => {
+    try {
+      return await run(await connect())
+    } catch {
+      client = null
+      return await run(await connect())
+    }
+  }
+
   return {
-    screenshot: async (options) => {
-      try {
-        return await (await connect()).screenshot(options)
-      } catch (error) {
-        /** 连接层面的问题重连一次再试，渲染本身的报错会在第二次原样抛出 */
-        client = null
-        return await (await connect()).screenshot(options)
-      }
-    },
+    screenshot: (options) => call((connected) => connected.screenshot(options)),
+    screenshotTiles: (options) => call((connected) => connected.screenshotTiles(options)),
     close: async () => {
       client?.close()
       client = null

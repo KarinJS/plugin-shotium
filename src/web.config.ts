@@ -106,13 +106,8 @@ const webConfig: {
       }),
       components.input.number('autoMultiPageHeight', {
         label: '自动分片高度',
-        description: '调用方传 multiPage: true 时，每片的高度(css 像素)',
+        description: '调用方传 multiPage: true 时，每片的高度(css 像素)，上限 32000',
         defaultValue: String(config.autoMultiPageHeight),
-      }),
-      components.input.number('sliceCompression', {
-        label: '分片重新编码的压缩级别',
-        description: '0-9。分片要把整张图拆开重压一遍，级别越低越快、体积越大，3 是折中值',
-        defaultValue: String(config.sliceCompression),
       }),
       components.divider.create('divider1'),
       components.input.string('cacheDir', {
@@ -161,7 +156,6 @@ const webConfig: {
         scale: toNumber(form.scale, current.scale),
         timeout: toNumber(form.timeout, current.timeout),
         autoMultiPageHeight: toNumber(form.autoMultiPageHeight, defaultConfig.autoMultiPageHeight),
-        sliceCompression: Math.min(9, Math.max(0, toNumber(form.sliceCompression, defaultConfig.sliceCompression))),
         cacheDir,
         cacheMaxBytes: toNumber(form.cacheMaxBytes, current.cacheMaxBytes),
         userAgent: String(form.userAgent ?? ''),

@@ -39,16 +39,8 @@ export interface ShotiumConfig {
   scale: number
   /** 默认导航超时(ms) */
   timeout: number
-  /** `multiPage: true` 时单张分片的最大高度(css px) */
+  /** `multiPage: true` 时单张分片的最大高度(css px)，上限 32000 */
   autoMultiPageHeight: number
-  /**
-   * 分片重新编码时的 deflate 级别 0-9
-   *
-   * 分片要把引擎给的整张 PNG 拆开重压一遍，这一步在大图上并不便宜：
-   * 同一份像素 level 9 要 1.3s、level 6 要 0.5s、level 3 只要 0.19s，
-   * 而体积差别只有个位数百分比。发到聊天里的图不值得为这点体积多等半秒。
-   */
-  sliceCompression: number
   /** HTTP 磁盘缓存目录，留空使用引擎默认目录，填 `off` 关闭缓存 */
   cacheDir: string
   /** HTTP 磁盘缓存上限(字节) */
@@ -76,7 +68,6 @@ export const defaultConfig: ShotiumConfig = {
   scale: 1,
   timeout: 30000,
   autoMultiPageHeight: 4000,
-  sliceCompression: 3,
   cacheDir: '',
   cacheMaxBytes: 256 * 1024 * 1024,
   userAgent: '',

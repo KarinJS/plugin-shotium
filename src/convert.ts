@@ -1,3 +1,5 @@
+import path from 'node:path'
+
 import type { ScreenshotOptions } from '@shotkit/shotium'
 import type { Snapka } from 'node-karin'
 import type { ShotiumConfig } from './config/index'
@@ -108,16 +110,45 @@ export const pickUnsupported = (options: Snapka): string[] => {
 }
 
 /**
+ * 引擎一次能从同一个滚动位置画出的最大 css 行数，也是 `tile.height` 的上限
+ *
+ * 超过这个值引擎会直接拒绝整个请求，所以这里夹住而不是原样传过去：
+ * 调用方要的是「一片别太高」，不是「宁可不出图」。
+ */
+export const MAX_TILE_HEIGHT = 32000
+
+/**
  * 计算每一片的高度(css px)
  * @param multiPage karin 的 multiPage 参数
  * @param autoHeight `true` 时使用的默认高度
- * @returns 分片高度，不分片时返回 0
+ * @returns 分片高度，1 到 32000 之间的整数；不分片时返回 0
  */
 export const toSliceHeight = (
   multiPage: number | boolean | undefined,
   autoHeight: number
 ): number => {
-  if (multiPage === true) return autoHeight
-  if (typeof multiPage === 'number' && multiPage > 0) return multiPage
-  return 0
+  const height = multiPage === true
+    ? autoHeight
+    : typeof multiPage === 'number' ? multiPage : 0
+  if (!(height > 0)) return 0
+  return Math.min(MAX_TILE_HEIGHT, Math.max(1, Math.round(height)))
+}
+
+/**
+ * 分片落盘时每一片的路径
+ *
+ * 分片模式下没有「整张图」这个东西可以往 `path` 上写，所以按片编号存：
+ * 路径里写了 `{n}` 就替换它，没写就把 1 起的序号插在扩展名前面。
+ * 只有一片时按调用方给的路径原样存，退化成不分片时的行为。
+ *
+ * @param file 调用方给的路径
+ * @param index 第几片，从 1 开始
+ * @param total 一共几片
+ * @returns 这一片的路径
+ */
+export const toTilePath = (file: string, index: number, total: number): string => {
+  if (file.includes('{n}')) return file.split('{n}').join(String(index))
+  if (total === 1) return file
+  const ext = path.extname(file)
+  return `${file.slice(0, file.length - ext.length)}-${index}${ext}`
 }

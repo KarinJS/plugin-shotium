@@ -28,7 +28,6 @@ describe('web.config', () => {
       scale: '2',
       timeout: '10000',
       autoMultiPageHeight: '3000',
-      sliceCompression: '1',
       cacheDir: '',
       cacheMaxBytes: '1024',
       userAgent: 'ua',
@@ -43,7 +42,7 @@ describe('web.config', () => {
     expect(saved.viewport).toEqual({ width: 1200, height: 900 })
     expect(saved.scale).toBe(2)
     expect(saved.cacheDir).toBe('')
-    expect(saved.sliceCompression).toBe(1)
+    expect(saved.autoMultiPageHeight).toBe(3000)
     expect(saved.logStats).toBe(false)
   })
 

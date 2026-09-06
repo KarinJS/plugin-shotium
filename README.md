@@ -36,20 +36,23 @@ karin 的渲染器就是一个函数：收下 `Options`，还回 base64。
 | `pageGotoParams.waitUntil` | `pageGotoParams.waitUntil` | `networkidle0/2` 统一归到 `networkidle` |
 | `pageGotoParams.timeout` | `pageGotoParams.timeout` | `0`(不超时) 回退到引擎默认值 |
 | `headers` | `headers` | 只对同源子资源生效，见下 |
-| `multiPage` | — | 插件侧对同一张图做无损切割 |
+| `multiPage` | `tile.height` | 走引擎的分片接口 `screenshotTiles()` |
 | `waitForSelector` 等 | — | 引擎没有 JS 运行时，忽略并提示一次 |
 
 ### 分片渲染
 
-`multiPage` 在 puppeteer 那边是「改视窗高度重截几次」，
-这里换成了「截一次，再把 PNG 按行切开」：不重新布局，也就不会出现分片之间样式对不上的情况。
-切割直接在 zlib 层面做，不依赖任何图像库。
+`multiPage` 在 puppeteer 那边是「改视窗高度重截几次」，这里交给引擎的
+`screenshotTiles()`：文档只加载、布局、光栅化一次，引擎在光栅化的过程中按行切开、
+逐片编码，同一时刻只存在一片的位图。每一片都来自同一次布局，不会出现分片之间样式对不上的情况。
 
-因为切割器只认 PNG，`multiPage` 配上 jpeg/webp 时会自动切到 png，并在日志里提示一次。
+`multiPage: true` 用配置里的 `autoMultiPageHeight`，传数字就是这个数字，
+单位是 css 像素，上限 32000（引擎从一个滚动位置能画出的最大行数），超过会被夹到上限。
+最后一片是余数，所以片数是 `ceil(高度 / 单片高度)`。
 
-切割要把整张图重压一遍，这一步在大图上并不便宜。1440x2541 那张图上，
-同一份像素 deflate level 9 要 1.3s、level 6 要 0.48s、level 3 只要 0.19s，
-而体积差别只有个位数百分比，所以默认用 level 3，可以通过 `sliceCompression` 调。
+分片不再限定输出格式：png / jpeg / webp 都能分片，`quality` 照常生效。
+
+分片模式下没有「整张图」可以往 `path` 上写，所以 `path` 按片编号存：路径里写了 `{n}`
+就替换成 1 起的序号，没写就把序号插在扩展名前面（`a.png` → `a-1.png`、`a-2.png`）。
 
 ### 本地文件怎么交给引擎
 
@@ -79,8 +82,7 @@ karin 的渲染器就是一个函数：收下 `Options`，还回 base64。
 | `viewport` | `800x600` | 默认视窗 |
 | `scale` | `1` | 默认设备像素比 |
 | `timeout` | `30000` | 默认导航超时 |
-| `autoMultiPageHeight` | `4000` | `multiPage: true` 时每片的高度 |
-| `sliceCompression` | `3` | 分片重新编码的 deflate 级别 0-9 |
+| `autoMultiPageHeight` | `4000` | `multiPage: true` 时每片的高度，css 像素，上限 32000 |
 | `cacheDir` | `''` | HTTP 磁盘缓存目录，留空用引擎默认，填 `off` 关闭 |
 | `cacheMaxBytes` | `256MB` | 缓存上限 |
 | `userAgent` | `''` | 留空使用引擎内置 |
