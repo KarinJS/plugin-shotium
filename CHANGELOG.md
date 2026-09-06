@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/KarinJS/plugin-shotium/compare/v0.2.2...v0.3.0) (2026-09-06)
+
+
+### ✨ Features
+
+* 分片改用引擎的 screenshotTiles ([770a6d5](https://github.com/KarinJS/plugin-shotium/commit/770a6d5904f7857ff16fed55da0da1130c97187f))
+
 ## [0.2.2](https://github.com/KarinJS/plugin-shotium/compare/v0.2.1...v0.2.2) (2026-09-06)
 
 
