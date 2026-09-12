@@ -73,6 +73,11 @@ export const toScreenshotOptions = (
     }
   }
 
+  /** Karin 默认截取 body；不补默认值时，Shotium 只会截取视口，导致长图被裁切 */
+  if (!result.fullPage && !result.selector && !result.clip) {
+    result.selector = 'body'
+  }
+
   const width = options.setViewport?.width ?? config.viewport.width
   const height = options.setViewport?.height ?? config.viewport.height
   result.viewport = { width, height }
@@ -152,3 +157,4 @@ export const toTilePath = (file: string, index: number, total: number): string =
   const ext = path.extname(file)
   return `${file.slice(0, file.length - ext.length)}-${index}${ext}`
 }
+
