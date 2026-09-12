@@ -17,6 +17,28 @@ describe('toWaitUntil', () => {
 })
 
 describe('toScreenshotOptions', () => {
+  it('未指定截图范围时默认截取 body，兼容 ling 的高倍率截图', () => {
+    const result = toScreenshotOptions(
+      { file: 'a.html', setViewport: { deviceScaleFactor: 4 } },
+      defaultConfig
+    )
+    expect(result.selector).toBe('body')
+    expect(result.viewport).toEqual(defaultConfig.viewport)
+    expect(result.scale).toBe(4)
+  })
+
+  it('fullPage 为 false 且未指定 selector 时仍默认截取 body', () => {
+    const result = toScreenshotOptions({ file: 'a.html', fullPage: false }, defaultConfig)
+    expect(result.selector).toBe('body')
+  })
+
+  it('显式 clip 不被默认 body 覆盖', () => {
+    const clip = { x: 10, y: 20, width: 300, height: 400 }
+    const result = toScreenshotOptions({ file: 'a.html', clip }, defaultConfig)
+    expect(result.clip).toEqual(clip)
+    expect(result.selector).toBeUndefined()
+  })
+
   it('png 不带 quality', () => {
     const result = toScreenshotOptions({ file: 'a.html', type: 'png', quality: 50 } as never, defaultConfig)
     expect(result.type).toBe('png')
@@ -109,3 +131,4 @@ describe('toTilePath', () => {
     expect(toTilePath('out/page.png', 1, 1)).toBe('out/page.png')
   })
 })
+
