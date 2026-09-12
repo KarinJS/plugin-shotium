@@ -9,7 +9,7 @@ import { isBridgeAvailable, toBridgeUrl, toFileUrl } from './bridge'
 import { pickUnsupported, toScreenshotOptions, toSliceHeight, toTilePath } from './convert'
 import { getConfig, pluginName, pluginVersion, HMR_KEY } from './config/index'
 
-import type { CaptureStats } from '@shotkit/shotium'
+import type { CaptureStats } from '@pixel.js/shotium'
 import type { Snapka } from 'node-karin'
 import type { Engine } from './engine'
 import type { ShotiumConfig } from './config/index'

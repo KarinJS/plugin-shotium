@@ -1,6 +1,6 @@
 import path from 'node:path'
 
-import type { ScreenshotOptions } from '@shotkit/shotium'
+import type { ScreenshotOptions } from '@pixel.js/shotium'
 import type { Snapka } from 'node-karin'
 import type { ShotiumConfig } from './config/index'
 
@@ -157,4 +157,3 @@ export const toTilePath = (file: string, index: number, total: number): string =
   const ext = path.extname(file)
   return `${file.slice(0, file.length - ext.length)}-${index}${ext}`
 }
-

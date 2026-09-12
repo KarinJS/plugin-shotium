@@ -1,5 +1,5 @@
 import { logger } from 'node-karin'
-import { start, stop, status, screenshot, screenshotTiles, daemon, cache } from '@shotkit/shotium'
+import { start, stop, status, screenshot, screenshotTiles, daemon, cache } from '@pixel.js/shotium'
 import { pluginName } from './config/index'
 
 import type {
@@ -9,7 +9,7 @@ import type {
   ScreenshotTilesResult,
   DaemonClient,
   StartOptions,
-} from '@shotkit/shotium'
+} from '@pixel.js/shotium'
 import type { ShotiumConfig } from './config/index'
 
 /**

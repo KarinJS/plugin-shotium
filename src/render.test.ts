@@ -2,7 +2,7 @@
  * 渲染器本身的端到端用例：真的把引擎拉起来渲染一次
  *
  * 其余用例都是纯映射，这一个是唯一一条覆盖「参数进去、图片出来」的路径，
- * 需要本机装得上 `@shotkit/shotium` 的平台包。
+ * 需要本机装得上 `@pixel.js/shotium` 的平台包。
  */
 import fs from 'node:fs'
 import os from 'node:os'

@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@shotkit/shotium':
-        specifier: ^0.7.2
-        version: 0.7.2
+      '@pixel.js/shotium':
+        specifier: ^0.7.4
+        version: 0.7.4
     devDependencies:
       '@types/express':
         specifier: 5.0.6
@@ -766,45 +766,46 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@shotkit/shotium-darwin-arm64@0.7.2':
-    resolution: {integrity: sha512-ilM40bDzOokNTHS7QgmrmGpu7+VC0KBZF/IF6tsma8K8J9u0RCv8hbpHTgS4OIMye2Yr4i5fnrycKh4JpHLa4w==}
+  '@pixel.js/shotium-darwin-arm64@0.7.4':
+    resolution: {integrity: sha512-GCgAIyLRj/1UQ44i/lUsykKSBM9ss14LeeaEI6eV0pzyv2yXCYCAtMcC90Fr3VKW4nxxRa6BualZJpqhq2Mcvw==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [darwin]
 
-  '@shotkit/shotium-darwin-x64@0.7.2':
-    resolution: {integrity: sha512-t8JNPglz76GV58o5YELXowSBVg8g9g+BTwDR1fqh+MEpeSdq186TRGQY7OoP04Ln3SRneuiHxamx2BC27ohTFQ==}
+  '@pixel.js/shotium-darwin-x64@0.7.4':
+    resolution: {integrity: sha512-zofx1BmdCJqpo0gIgYz8wmF+ylIZn4aNmXZDiX7w6sbzPsCJ7ncEhHaBzPPJyvh/HOh+OKWVZzTBturSVa7u4w==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [darwin]
 
-  '@shotkit/shotium-linux-arm64@0.7.2':
-    resolution: {integrity: sha512-uWW3/YAbJdPYwwXxazJmIJ6V/VpGRWKoGtUcjeQjk3NiOQo5BmD1csBsNrQCWClLJtNKdAcLoyYcJXvNRhcQGA==}
+  '@pixel.js/shotium-linux-arm64@0.7.4':
+    resolution: {integrity: sha512-I9BkBED51wmQuVR1APksPMSqaJ9fmYeNv+fHgrAZCCWHH4ioAKbsoF7j4iovfGhW+lRdjcmzzzlCk6d2u3SC8w==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [linux]
 
-  '@shotkit/shotium-linux-x64@0.7.2':
-    resolution: {integrity: sha512-9F/EidI6jewcT4kr5LiP2HzLiUrAsGNjZbsFPYBlFc+1vRlR3AfkDZ8KtJJSBVJkBMpj1KKuComjlIcFCvAb2g==}
+  '@pixel.js/shotium-linux-x64@0.7.4':
+    resolution: {integrity: sha512-GeE/Ok/M/MWBt2a8EE/KvH5msIiK5k1r98nHumqcgSUyV9pU+nKyRTCaNtkjBkUipXMrDhqqfSOidW6siMUN/A==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
 
-  '@shotkit/shotium-win32-arm64@0.7.2':
-    resolution: {integrity: sha512-sU02nWl48jJB9JoEQEbnFf3+TaX/zcedrJY2enOUT7Q+/H51dlYPpphUd8vgidMmtZavWClNOLW/brr1jFsp/w==}
+  '@pixel.js/shotium-win32-arm64@0.7.4':
+    resolution: {integrity: sha512-4bzmq1GdEK8ufqWdpLGgwN20lgXsJyAPTijWYUCw2+NCE/MZZBOMYXQTYdaAamXvGftHAZcOzCUzmGOGTMBPAA==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [win32]
 
-  '@shotkit/shotium-win32-x64@0.7.2':
-    resolution: {integrity: sha512-SaRiH0uoQg15VD/7JOT8tvwKFgnWwRf60+0/Ub2K0nQlOPstlDMXs6c+DaASFA9H8GGCbLhDwqJXfTHqZd38iw==}
+  '@pixel.js/shotium-win32-x64@0.7.4':
+    resolution: {integrity: sha512-NqnHXpfCTAT0uoZnc7c5Vx7EMOjqEw/u52Amp8Dfk5B7YKO9oOrgTLuIZSXh//OiFJws2CnqH05PNdfZdB4vSw==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
 
-  '@shotkit/shotium@0.7.2':
-    resolution: {integrity: sha512-zG91vXLdPZjlX/646hdbmeUngGR+JfAv+hdkgZemf8n5AHi4qiOaNqhS/8Z6BvTCGBt4i3zuQ0Sr3pRl8dzPww==}
+  '@pixel.js/shotium@0.7.4':
+    resolution: {integrity: sha512-aLYi+wlDynp1ehcqyL/shf4s8E/MZf7R91tpCRze5gLdqJYy23oNHyAjPBsQqIR4Xr4ANJxziivWLZos4u8VrQ==}
     engines: {node: '>=18'}
+    hasBin: true
 
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
@@ -2875,32 +2876,32 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.63.0':
     optional: true
 
-  '@shotkit/shotium-darwin-arm64@0.7.2':
+  '@pixel.js/shotium-darwin-arm64@0.7.4':
     optional: true
 
-  '@shotkit/shotium-darwin-x64@0.7.2':
+  '@pixel.js/shotium-darwin-x64@0.7.4':
     optional: true
 
-  '@shotkit/shotium-linux-arm64@0.7.2':
+  '@pixel.js/shotium-linux-arm64@0.7.4':
     optional: true
 
-  '@shotkit/shotium-linux-x64@0.7.2':
+  '@pixel.js/shotium-linux-x64@0.7.4':
     optional: true
 
-  '@shotkit/shotium-win32-arm64@0.7.2':
+  '@pixel.js/shotium-win32-arm64@0.7.4':
     optional: true
 
-  '@shotkit/shotium-win32-x64@0.7.2':
+  '@pixel.js/shotium-win32-x64@0.7.4':
     optional: true
 
-  '@shotkit/shotium@0.7.2':
+  '@pixel.js/shotium@0.7.4':
     optionalDependencies:
-      '@shotkit/shotium-darwin-arm64': 0.7.2
-      '@shotkit/shotium-darwin-x64': 0.7.2
-      '@shotkit/shotium-linux-arm64': 0.7.2
-      '@shotkit/shotium-linux-x64': 0.7.2
-      '@shotkit/shotium-win32-arm64': 0.7.2
-      '@shotkit/shotium-win32-x64': 0.7.2
+      '@pixel.js/shotium-darwin-arm64': 0.7.4
+      '@pixel.js/shotium-darwin-x64': 0.7.4
+      '@pixel.js/shotium-linux-arm64': 0.7.4
+      '@pixel.js/shotium-linux-x64': 0.7.4
+      '@pixel.js/shotium-win32-arm64': 0.7.4
+      '@pixel.js/shotium-win32-x64': 0.7.4
 
   '@standard-schema/spec@1.1.0': {}
 

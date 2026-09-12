@@ -131,4 +131,3 @@ describe('toTilePath', () => {
     expect(toTilePath('out/page.png', 1, 1)).toBe('out/page.png')
   })
 })
-
