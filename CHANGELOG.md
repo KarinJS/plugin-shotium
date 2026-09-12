@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.2](https://github.com/KarinJS/plugin-shotium/compare/v0.3.1...v0.3.2) (2026-09-12)
+
+
+### 🐛 Bug Fixes
+
+* default screenshot selector to body for Karin compatibility ([#6](https://github.com/KarinJS/plugin-shotium/issues/6)) ([95431b9](https://github.com/KarinJS/plugin-shotium/commit/95431b94f86dd57e9a3605a38ee7a9b1b590c1dc))
+* **deps:** migrate to [@pixel](https://github.com/pixel).js/shotium 0.7.4 ([c3cb9bf](https://github.com/KarinJS/plugin-shotium/commit/c3cb9bfac14767390711781e866e338c29025b2e))
+
 ## [0.3.1](https://github.com/KarinJS/plugin-shotium/compare/v0.3.0...v0.3.1) (2026-09-10)
 
 
