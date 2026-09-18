@@ -33,7 +33,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@pixel.js/shotium": "^0.11.1"
+    "@pixel.js/shotium": "^0.11.2"
   },
   "devDependencies": {
     "@types/express": "5.0.6",
