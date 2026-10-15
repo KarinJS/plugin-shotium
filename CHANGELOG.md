@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.7](https://github.com/KarinJS/plugin-shotium/compare/v0.3.6...v0.3.7) (2026-10-15)
+
+
+### 🐛 Bug Fixes
+
+* **deps:** require shotium 0.12.4 for cached image reuse ([b9c7fcc](https://github.com/KarinJS/plugin-shotium/commit/b9c7fcc5e921fd90e7812993ec4af8f0525a3b9f))
+
 ## [0.3.6](https://github.com/KarinJS/plugin-shotium/compare/v0.3.5...v0.3.6) (2026-09-19)
 
 
