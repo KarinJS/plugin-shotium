@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.8](https://github.com/KarinJS/plugin-shotium/compare/v0.3.7...v0.3.8) (2026-11-21)
+
+
+### 🐛 Bug Fixes
+
+* **deps:** require shotium 0.13.0 ([e331d7c](https://github.com/KarinJS/plugin-shotium/commit/e331d7cc9f53a07f9584b2a93b5b1eb01e234d2b))
+
 ## [0.3.7](https://github.com/KarinJS/plugin-shotium/compare/v0.3.6...v0.3.7) (2026-10-15)
 
 
