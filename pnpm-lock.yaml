@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@pixel.js/shotium':
-        specifier: ^0.12.4
-        version: 0.12.4
+        specifier: ^0.13.0
+        version: 0.13.0
     devDependencies:
       '@types/express':
         specifier: 5.0.6
@@ -548,56 +548,56 @@ packages:
   '@oxc-project/types@0.150.0':
     resolution: {integrity: sha512-rDS5/31E9HfPl/CIzGrn0DOlvBbXFseQ5URJ9sYMfstbKLD/c6Gm9vmRzRGDdAXyOIL4zmO37lc9RIwYqVruZw==}
 
-  '@pixel.js/shotium-darwin-arm64@0.12.4':
-    resolution: {integrity: sha512-Y/2a0KoCnVlPrMh8md86gEBJUbPIqzjEraIJsOm3JEqyP55GyrYASY6nXbWcFTduWv7D2waHbubE26qJ4AQcpQ==}
+  '@pixel.js/shotium-darwin-arm64@0.13.0':
+    resolution: {integrity: sha512-Je0TYtI6K412Q3JwZLvEQTaL6yGdUwXG8hcs5179lo+eGcFO6vS4ZulPXStkoA6RHXk7jL/BjPU5nJ++KFKIeA==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [darwin]
 
-  '@pixel.js/shotium-darwin-x64@0.12.4':
-    resolution: {integrity: sha512-Wi52Pj3TmoNJG+zp8KcSBwAakl0WnMMDfvB7m4DkplgvlasexmgLVwoUSjjns0vTXJThs6Fcp3mvLsyUFfzlrw==}
+  '@pixel.js/shotium-darwin-x64@0.13.0':
+    resolution: {integrity: sha512-mELjiYpwJiVUjy9vd7DelgzbAoOyGHEygf8dmaG4NrcdNdPbCewPffv1NTSg6VIrebz3TfrwvLwVLZL87b/XnA==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [darwin]
 
-  '@pixel.js/shotium-linux-arm64-musl@0.12.4':
-    resolution: {integrity: sha512-RMIqTZdy9NPE0sQ39M4vXsrk9nOaZAFWWkttK+KDkZRfjr7gBCBZ7z3/fKWLuKXApdugNi9xu5ko8lsEtWJECw==}
+  '@pixel.js/shotium-linux-arm64-musl@0.13.0':
+    resolution: {integrity: sha512-bTsGVgYoP6sD00BLTQEa/v9DbETMLOk0Mb0k1JAjlX1RMfIUG+UI2dhQ2jyN80lW9thEhbDpGH7eiH4h1/YwiQ==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [linux]
 
-  '@pixel.js/shotium-linux-arm64@0.12.4':
-    resolution: {integrity: sha512-ORzRH6yfS7XVtxIlCDeuGbviEyhwEhbmaRqBmhaws3yoQf4uQAWCX1Br5pOHb9p39NQfYaiL4DVzyTP5TfylMA==}
+  '@pixel.js/shotium-linux-arm64@0.13.0':
+    resolution: {integrity: sha512-un+/4AN78WIWJAT+RLO9J6AeEmG0JhdMOT1gHLbqPeQ1/Zkb94wrAGs0lV/UV5rPThgnUhQrI+vJH7hR++uBfg==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [linux]
 
-  '@pixel.js/shotium-linux-x64-musl@0.12.4':
-    resolution: {integrity: sha512-OMUuh9xR//qK1ZW2pkRPQD146xA9XoQK/TDvBxlRKfuwwpdyt8UVnI60HTzLH+nnQfrODAvad03rGDfpFQ6cXw==}
+  '@pixel.js/shotium-linux-x64-musl@0.13.0':
+    resolution: {integrity: sha512-KWtFoBtFvwN4y6CEPTWKF0R7fyHElWi9vX2/z59uBhDMGthzqvXwKYolbZI3FkbTYcmBxh3fbBZwVDne3FJfTA==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
 
-  '@pixel.js/shotium-linux-x64@0.12.4':
-    resolution: {integrity: sha512-MjD3sNNgu+RyUa58t8kftBnWjXxBZs5tFsFZnWxcFX6UBEbbQ3rqmHlYFq+DRp9nz9Ut/ga4F94T0fVftiVL7w==}
+  '@pixel.js/shotium-linux-x64@0.13.0':
+    resolution: {integrity: sha512-39/7tTJxRe792/167p2bB3e8Er8Ei38yojtZ6iTHFeSw4nGc8W7Nc0jY+ilDdQmPh6aDMoyamK+TqiisjjqDvg==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
 
-  '@pixel.js/shotium-win32-arm64@0.12.4':
-    resolution: {integrity: sha512-ebrscBxzZ1w5wEEexkmyxbQx2zXpNsdoeDfo1AZH4cuEYDnUK7ogRgRlVBgbN3t1FfJOXVqxb3XklcDotyWCnQ==}
+  '@pixel.js/shotium-win32-arm64@0.13.0':
+    resolution: {integrity: sha512-mdfzSAG+JTpQmct6LWwuI5pnp/jJXmZ5VwdrKcIL/VRanM1G1xocU51G8uf2Ac/nFPL8M2xpzkommFYXzcIEZg==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [win32]
 
-  '@pixel.js/shotium-win32-x64@0.12.4':
-    resolution: {integrity: sha512-7cfv7fNNPlHHe8hxNZ7S4FRAqC3oJzRixs28GjZa6qSkWryld95171Ib7s3CnPECWBExjT8XeBwO1bHCoKemSQ==}
+  '@pixel.js/shotium-win32-x64@0.13.0':
+    resolution: {integrity: sha512-ln65JVTzRClMgfwtCoNvQuCHeONiAtJitlwOAJET+i57PTx6zzdNlGRKwkwN3YwbQLoxlGqeTGjvTVvjRDG0jw==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
 
-  '@pixel.js/shotium@0.12.4':
-    resolution: {integrity: sha512-YTMjE1TTFkbet2Hg4TraF32W3a8NIgasewdDDnzmZVeOiKaX27dvO8lyHtYxITXr1FtkCBeHtbmNDSn0raI51g==}
+  '@pixel.js/shotium@0.13.0':
+    resolution: {integrity: sha512-ysbZS/GUChM07AKzL6HwWuDdEWUDXOpRZCMgWyDes/cq39D8SaXLznXo+IB3zjPXXUfHDUEq9hE0HpWaij/BIA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -2766,40 +2766,40 @@ snapshots:
 
   '@oxc-project/types@0.150.0': {}
 
-  '@pixel.js/shotium-darwin-arm64@0.12.4':
+  '@pixel.js/shotium-darwin-arm64@0.13.0':
     optional: true
 
-  '@pixel.js/shotium-darwin-x64@0.12.4':
+  '@pixel.js/shotium-darwin-x64@0.13.0':
     optional: true
 
-  '@pixel.js/shotium-linux-arm64-musl@0.12.4':
+  '@pixel.js/shotium-linux-arm64-musl@0.13.0':
     optional: true
 
-  '@pixel.js/shotium-linux-arm64@0.12.4':
+  '@pixel.js/shotium-linux-arm64@0.13.0':
     optional: true
 
-  '@pixel.js/shotium-linux-x64-musl@0.12.4':
+  '@pixel.js/shotium-linux-x64-musl@0.13.0':
     optional: true
 
-  '@pixel.js/shotium-linux-x64@0.12.4':
+  '@pixel.js/shotium-linux-x64@0.13.0':
     optional: true
 
-  '@pixel.js/shotium-win32-arm64@0.12.4':
+  '@pixel.js/shotium-win32-arm64@0.13.0':
     optional: true
 
-  '@pixel.js/shotium-win32-x64@0.12.4':
+  '@pixel.js/shotium-win32-x64@0.13.0':
     optional: true
 
-  '@pixel.js/shotium@0.12.4':
+  '@pixel.js/shotium@0.13.0':
     optionalDependencies:
-      '@pixel.js/shotium-darwin-arm64': 0.12.4
-      '@pixel.js/shotium-darwin-x64': 0.12.4
-      '@pixel.js/shotium-linux-arm64': 0.12.4
-      '@pixel.js/shotium-linux-arm64-musl': 0.12.4
-      '@pixel.js/shotium-linux-x64': 0.12.4
-      '@pixel.js/shotium-linux-x64-musl': 0.12.4
-      '@pixel.js/shotium-win32-arm64': 0.12.4
-      '@pixel.js/shotium-win32-x64': 0.12.4
+      '@pixel.js/shotium-darwin-arm64': 0.13.0
+      '@pixel.js/shotium-darwin-x64': 0.13.0
+      '@pixel.js/shotium-linux-arm64': 0.13.0
+      '@pixel.js/shotium-linux-arm64-musl': 0.13.0
+      '@pixel.js/shotium-linux-x64': 0.13.0
+      '@pixel.js/shotium-linux-x64-musl': 0.13.0
+      '@pixel.js/shotium-win32-arm64': 0.13.0
+      '@pixel.js/shotium-win32-x64': 0.13.0
 
   '@rolldown/binding-android-arm-eabi@1.2.9':
     optional: true
